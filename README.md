@@ -1,4 +1,4 @@
-# 🎬 Idea-to-Video Generator
+# 🎬 Idea: Idea-to-Video Generator
 
 An AI-powered platform that transforms any topic into a complete video with script, voiceover, visuals, and assembly — all from a single prompt.
 
