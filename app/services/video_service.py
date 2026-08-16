@@ -143,17 +143,14 @@ async def _generate_fal(
     logger.info("Generating video clip [fal]: %s", output_path.name)
     ratio_config = ASPECT_RATIO_MAP.get(aspect_ratio, ASPECT_RATIO_MAP["9:16"])
 
-    def _sync_call() -> dict:
-        return fal_client.subscribe(
-            "fal-ai/hunyuan-video",
-            arguments={
-                "prompt": prompt,
-                **ratio_config,
-            },
-            with_logs=True,
-        )
-
-    result = await run_in_threadpool(_sync_call)
+    result = await fal_client.subscribe_async(
+        "fal-ai/hunyuan-video",
+        arguments={
+            "prompt": prompt,
+            **ratio_config,
+        },
+        with_logs=True,
+    )
     video_url = result["video"]["url"]
     await _download_file(video_url, output_path)
 
