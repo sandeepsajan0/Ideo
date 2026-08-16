@@ -29,6 +29,8 @@ Thumbs.db
 *.png
 *.gif
 *.webp
+!docs/*.mp4
+!docs/*.png
 
 # Text logs and responses
 *.txt
