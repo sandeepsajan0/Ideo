@@ -1,0 +1,18 @@
+# Core
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+python-dotenv>=1.0.0
+pydantic-settings>=2.0.0
+aiofiles>=24.0.0
+python-multipart>=0.0.9
+sse-starlette>=2.0.0
+
+# AI Services
+google-genai>=1.0.0
+fal-client>=0.5.0
+
+# TTS — Free (default)
+edge-tts>=6.1.0
+
+# TTS — Premium (optional, only if TTS_ENGINE=elevenlabs)
+elevenlabs>=1.0.0

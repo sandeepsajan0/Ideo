@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Transform any topic into a complete AI-generated video with script, voiceover, and visuals.">
+    <title>Idea to Video — AI Video Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+</head>
+<body>
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <div class="app-container">
+        <!-- ─── Header ─── -->
+        <header class="app-header">
+            <div class="app-logo">
+                <div class="app-logo-icon">🎬</div>
+                <h1>Idea to Video</h1>
+            </div>
+            <p class="app-subtitle">Transform any topic into a stunning AI-generated video with script, voiceover, and visuals</p>
+        </header>
+
+        <!-- ─── Input Section ─── -->
+        <section class="input-section glass-card" id="input-section">
+            <div class="topic-input-wrapper">
+                <input
+                    type="text"
+                    id="topic-input"
+                    class="topic-input"
+                    placeholder="Enter your video topic... e.g. 'The history of Roman Aqueducts'"
+                    maxlength="500"
+                    autocomplete="off"
+                >
+            </div>
+
+            <div class="settings-row">
+                <div class="setting-group">
+                    <label class="setting-label" for="aspect-ratio">Aspect Ratio</label>
+                    <select id="aspect-ratio" class="setting-select">
+                        <option value="9:16">9:16 — Shorts / Reels</option>
+                        <option value="16:9">16:9 — YouTube Landscape</option>
+                        <option value="1:1">1:1 — Instagram Square</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label" for="num-scenes">Scenes</label>
+                    <select id="num-scenes" class="setting-select">
+                        <option value="2">2 Scenes</option>
+                        <option value="3" selected>3 Scenes</option>
+                        <option value="4">4 Scenes</option>
+                        <option value="5">5 Scenes</option>
+                        <option value="6">6 Scenes</option>
+                        <option value="7">7 Scenes</option>
+                        <option value="8">8 Scenes</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label" for="target-duration">Video Length</label>
+                    <select id="target-duration" class="setting-select">
+                        <option value="1">1 Min</option>
+                        <option value="2" selected>2 Mins</option>
+                        <option value="5">5 Mins</option>
+                        <option value="10">10 Mins</option>
+                        <option value="15">15 Mins</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="settings-row">
+                <div class="setting-group">
+                    <label class="setting-label" for="video-engine">Video Engine</label>
+                    <select id="video-engine" class="setting-select">
+                        <option value="slideshow">🖼️ Slideshow Mode — Free</option>
+                        <option value="veo">🎥 Google Veo — Premium</option>
+                        <option value="fal">🎥 Fal.ai Hunyuan — Premium</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label" for="image-engine">Image Engine</label>
+                    <select id="image-engine" class="setting-select">
+                        <option value="pollinations">🖼️ Pollinations (Free - No Key)</option>
+                        <option value="imagen">🖼️ Google Imagen — Premium</option>
+                        <option value="huggingface">🤗 Hugging Face FLUX (Free - HF_TOKEN)</option>
+                        <option value="fal">🚀 Fal.ai (Premium - FAL_KEY)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-row">
+                <div class="setting-group">
+                    <label class="setting-label" for="tts-engine">Voice Engine</label>
+                    <select id="tts-engine" class="setting-select" onchange="onEngineChange()">
+                        <option value="edge">🆓 Edge TTS — Free</option>
+                        <option value="elevenlabs">💎 ElevenLabs — Premium</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label" for="voice-select">Voice</label>
+                    <select id="voice-select" class="setting-select">
+                        <option value="en-US-GuyNeural">Guy (US Male)</option>
+                        <option value="en-US-JennyNeural">Jenny (US Female)</option>
+                        <option value="en-US-AriaNeural">Aria (US Female, Expressive)</option>
+                        <option value="en-GB-RyanNeural">Ryan (British Male)</option>
+                        <option value="en-IN-PrabhatNeural">Prabhat (Indian Male - English)</option>
+                        <option value="en-IN-NeerjaNeural">Neerja (Indian Female - English)</option>
+                        <option value="hi-IN-MadhurNeural">Madhur (Hindi Male)</option>
+                        <option value="hi-IN-SwaraNeural">Swara (Hindi Female)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button id="generate-btn" class="btn btn-primary btn-full" onclick="startGeneration()">
+                <span>✨</span>
+                <span>Generate Video</span>
+            </button>
+        </section>
+
+        <!-- ─── Main Content (shown during/after generation) ─── -->
+        <div id="main-content" class="main-content hidden">
+
+            <!-- ─── Left: Pipeline Dashboard ─── -->
+            <div class="pipeline-section">
+                <!-- Progress -->
+                <div class="glass-card">
+                    <div class="progress-container">
+                        <div class="progress-header">
+                            <span class="progress-label" id="progress-status">Initializing...</span>
+                            <span class="progress-percentage" id="progress-pct">0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Pipeline Steps -->
+                    <div class="pipeline-steps" id="pipeline-steps">
+                        <div class="pipeline-step" id="step-script" data-step="script">
+                            <div class="step-indicator">1</div>
+                            <div class="step-info">
+                                <div class="step-title">Script Generation</div>
+                                <div class="step-subtitle">AI writes narration & visual prompts</div>
+                            </div>
+                        </div>
+                        <div class="pipeline-step" id="step-media" data-step="media">
+                            <div class="step-indicator">2</div>
+                            <div class="step-info">
+                                <div class="step-title">Media Generation</div>
+                                <div class="step-subtitle">Voiceover & video clips for each scene</div>
+                            </div>
+                        </div>
+                        <div class="pipeline-step" id="step-assembly" data-step="assembly">
+                            <div class="step-indicator">3</div>
+                            <div class="step-info">
+                                <div class="step-title">Video Assembly</div>
+                                <div class="step-subtitle">Merging and compositing final video</div>
+                            </div>
+                        </div>
+                        <div class="pipeline-step" id="step-complete" data-step="complete">
+                            <div class="step-indicator">4</div>
+                            <div class="step-info">
+                                <div class="step-title">Complete</div>
+                                <div class="step-subtitle">Your video is ready!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scene Details -->
+                <div class="glass-card" id="scenes-panel">
+                    <div class="section-title">
+                        <span class="icon">🎞️</span>
+                        <span>Scenes</span>
+                    </div>
+                    <div class="scenes-grid" id="scenes-grid">
+                        <!-- Scenes populated dynamically -->
+                        <div class="empty-state" id="scenes-empty">
+                            <div class="empty-icon">📝</div>
+                            <p>Script will appear here once generated</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Log -->
+                <div class="glass-card">
+                    <div class="section-title">
+                        <span class="icon">📋</span>
+                        <span>Activity Log</span>
+                    </div>
+                    <div class="log-panel" id="log-panel">
+                        <div class="log-entry log-info">
+                            <span class="log-time">--:--</span>
+                            <span class="log-msg">Waiting to start...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── Right: Video Preview ─── -->
+            <div class="preview-section">
+                <div class="glass-card">
+                    <div class="section-title">
+                        <span class="icon">🎥</span>
+                        <span>Preview</span>
+                    </div>
+
+                    <div class="video-player-wrapper" id="video-wrapper">
+                        <!-- Video or placeholder -->
+                        <div class="video-placeholder" id="video-placeholder">
+                            <div class="placeholder-icon">🎬</div>
+                            <p>Your generated video will appear here</p>
+                            <div class="loading-dots hidden" id="preview-loading">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </div>
+                        <video id="video-player" class="hidden" controls></video>
+                    </div>
+
+                    <div class="video-actions hidden" id="video-actions">
+                        <button class="btn btn-primary" onclick="downloadVideo()" id="download-btn">
+                            <span>⬇️</span>
+                            <span>Download Video</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="newProject()">
+                            <span>➕</span>
+                            <span>New Video</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── Project History ─── -->
+        <section class="history-section" id="history-section">
+            <div class="section-title">
+                <span class="icon">🕐</span>
+                <span>Recent Projects</span>
+            </div>
+            <div class="history-grid" id="history-grid">
+                <!-- Populated dynamically -->
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
