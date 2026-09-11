@@ -1,0 +1,25 @@
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables (Never copy this to Docker!)
+.env
+
+# Git
+.git/
+.gitignore
+
+# Local output and testing files
+output/
+docs/
+*.mp4
+*.mp3
+*.jpg
+raw_hf_response.txt
