@@ -1,8 +1,8 @@
 FROM python:3.11-slim
 
-# Install system dependencies (ffmpeg is required for video assembly)
+# Install system dependencies (ffmpeg is required for video assembly, curl for downloading)
 RUN apt-get update && \
-    apt-get install -y ffmpeg && \
+    apt-get install -y ffmpeg curl && \
     rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
